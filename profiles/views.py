@@ -5,7 +5,9 @@ from .models import Profile
 def my_profile_view(request):
     """Main user view"""
 
-    obj = Profile.objects.get(user=request.user)
+    profile = Profile.objects.get(user=request.user)
 
-    context = {"obj": obj}
+    context = {
+        "profile": profile,
+    }
     return render(request, "profiles/my_profile.html", context)
