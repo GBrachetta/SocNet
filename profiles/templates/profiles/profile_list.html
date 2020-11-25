@@ -14,18 +14,18 @@ all profiles
             <div class="ui grid">
                 <div class="row">
                     <div class="three wide column">
-                        <img class="ui small circular image" src={{obj.avatar.url}}>
+                        <img class="ui small circular image" src={{ obj.avatar.url }}>
                     </div>
                     <div class="thirteen wide column">
-                        <h3>{{obj.user}}</h3>
-                        <p>{{obj.bio}}</p>
-                        <a href={{obj.get_absolute_url}}><button class="ui primary button mb-5 w-big">See profile</button></a>
+                        <h3>{{ obj.user }}</h3>
+                        <p>{{ obj.bio }}</p>
+                        <a href={{ obj.get_absolute_url }}><button class="ui primary button mb-5 w-big">See profile</button></a>
                         <br>
 
                         {% if obj.user not in rel_receiver and obj.user not in rel_sender %}
                         <form action="{% url 'profiles:send-invite' %}" method="POST">
                             {% csrf_token %}
-                            <input type="hidden" name="profile_pk" value={{obj.pk}}>
+                            <input type="hidden" name="profile_pk" value={{ obj.pk }}>
                             <button type="submit" class="ui positive basic button mb-5 w-big"><i class="plus square icon"></i>Add to friends</button>
                         </form>
                         {% endif %}
