@@ -1,33 +1,29 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
-from .utils import get_random_code
 from django.db.models import Q
+from .utils import get_random_code
 
 
 class ProfileManager(models.Manager):
+    """Users to invite"""
+
     def get_all_profiles_to_invite(self, sender):
         profiles = Profile.objects.all().exclude(user=sender)
         profile = Profile.objects.get(user=sender)
         qs = Relationship.objects.filter(
             Q(sender=profile) | Q(receiver=profile)
         )
-        print(qs)
-        print("##########")
 
         accepted = set([])
         for rel in qs:
             if rel.status == "accepted":
                 accepted.add(rel.receiver)
                 accepted.add(rel.sender)
-        print(accepted)
-        print("##########")
 
         available = [
             profile for profile in profiles if profile not in accepted
         ]
-        print(available)
-        print("##########")
 
         return available
 
@@ -106,12 +102,16 @@ STATUS_CHOICES = (("sent", "sent"), ("accepted", "accepted"))
 
 
 class RelationshipManager(models.Manager):
+    """Manager"""
+
     def invitations_received(self, receiver):
         qs = Relationship.objects.filter(receiver=receiver, status="sent")
         return qs
 
 
 class Relationship(models.Model):
+    """Relationships"""
+
     sender = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name="sender"
     )
