@@ -1,11 +1,11 @@
-from django.core.checks import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.contrib import messages
+from django.views.generic import UpdateView, DeleteView
 from profiles.models import Profile
 from .models import Post, Like
 from .forms import PostModelForm, CommentModelForm
-from django.views.generic import UpdateView, DeleteView
-from django.contrib import messages
+from django.http import JsonResponse
 
 
 def post_comment_create_and_list_view(request):
@@ -76,7 +76,10 @@ def like_unlike_post(request):
         post_obj.save()
         like.save()
 
-        return redirect("posts:main-post-view")
+        data = {"value": like.value, "likes": post_obj.liked.all().count()}
+        return JsonResponse(data, safe=False)
+
+    return redirect("posts:main-post-view")
 
 
 class PostDeleteView(DeleteView):
