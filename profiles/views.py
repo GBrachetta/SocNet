@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views.generic import ListView
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -33,12 +33,43 @@ def invites_received_view(request):
 
     profile = Profile.objects.get(user=request.user)
     qs = Relationship.objects.invitations_received(profile)
+    result = list(map(lambda x: x.sender, qs))
+    is_empty = False
+    if len(result) == 0:
+        is_empty = True
 
     context = {
-        "qs": qs,
+        "qs": result,
+        "is_empty": is_empty,
     }
 
     return render(request, "profiles/my_invites.html", context)
+
+
+def accept_invitation(request):
+    if request.method == "POST":
+        pk = request.POST.get("profile_pk")
+        sender = Profile.objects.get(pk=pk)
+        receiver = Profile.objects.get(user=request.user)
+        rel = get_object_or_404(
+            Relationship, sender=sender, receiver=receiver
+        )
+        if rel.status == 'sent':
+            rel.status = 'accepted'
+            rel.save()
+    return redirect('profiles:my-invites-view')
+
+
+def reject_invitation(request):
+    if request.method == "POST":
+        pk = request.POST.get("profile_pk")
+        sender = Profile.objects.get(pk=pk)
+        receiver = Profile.objects.get(user=request.user)
+        rel = get_object_or_404(
+            Relationship, sender=sender, receiver=receiver
+        )
+        rel.delete()
+    return redirect('profiles:my-invites-view')
 
 
 def invites_profiles_list_view(request):
