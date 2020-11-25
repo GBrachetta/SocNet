@@ -38,11 +38,24 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
     "posts",
     "profiles",
 ]
 
-LOGIN_URL = '/admin/'
+# LOGIN_URL = "/admin/"
+LOGIN_REDIRECT_URL = "/posts"
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_UNIQUE = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+if DEBUG:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -55,6 +68,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "bffboo.urls"
+
+SITE_ID = 1
 
 TEMPLATES = [
     {
@@ -72,6 +87,11 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 WSGI_APPLICATION = "bffboo.wsgi.application"
