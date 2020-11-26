@@ -1,13 +1,14 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.contrib import messages
-from django.views.generic import UpdateView, DeleteView
-from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, UpdateView
 from profiles.models import Profile
-from .models import Post, Like
-from .forms import PostModelForm, CommentModelForm
+
+from .forms import CommentModelForm, PostModelForm
+from .models import Like, Post
 
 
 @login_required

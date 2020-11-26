@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
-from django.shortcuts import reverse
 from django.db import models
-from django.template.defaultfilters import slugify
 from django.db.models import Q
+from django.shortcuts import reverse
+from django.template.defaultfilters import slugify
+
 from .utils import get_random_code
 
 

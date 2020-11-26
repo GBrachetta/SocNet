@@ -1,15 +1,15 @@
 from django.urls import path
+
 from .views import (
-    invites_received_view,
-    my_profile_view,
-    # profiles_list_view,
-    invites_profiles_list_view,
     ProfileDetailView,
     ProfileListView,
-    send_invitation,
-    remove_from_friends,
     accept_invitation,
+    invites_profiles_list_view,
+    invites_received_view,
+    my_profile_view,
     reject_invitation,
+    remove_from_friends,
+    send_invitation,
 )
 
 app_name = "profiles"
